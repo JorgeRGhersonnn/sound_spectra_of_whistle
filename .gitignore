@@ -1,0 +1,17 @@
+# Environments
+.venv/
+__pycache__/
+
+# Datasets and Processed Arrays
+data/
+processed_data/
+*.mat
+*.npy
+
+# Model Weights and Outputs
+saved_models/
+*.pth
+plots/
+
+# OS generated files
+.DS_Store
