@@ -1,9 +1,15 @@
-# Visualization of Sound Spectra of a Whistle 
+# Sound Spectra of a Whistle
 
-## General Objective 
+This repository contains a complete machine learning pipeline that predicts the mass flow rate of a system based purely on its acoustic whistle signature. It processes raw `.mat` audio recordings, extracts frequency features, and trains both linear baselines and a 1D Convolutional Neural Network (1D-CNN) using PyTorch.
 
-We have a dataset containing the sound spectra of a whistle collected at different mass 
-flow rates, pressures, and frequencies. The main objective of this project is to 
-visualize the sound spectra in a way that would allow a Convolution Neural Network (CNN) 
-or a human to efficiently see the relationship between the sound spectra and the 
-mass flow rate. 
+## Project Structure
+
+* `config.py`: Global hyperparameters (frequencies, Welch's method parameters).
+* `data_preprocessing.py`: Loads raw `.mat` files, applies Welch's Method for PSD, and saves `.npy` arrays.
+* `baselines.py`: Trains Ridge Regression and simple Linear Regression benchmark models.
+* `dataset.py`: Custom PyTorch `Dataset` and `DataLoader` for batching.
+* `models.py`: Defines the 1D-CNN architecture.
+* `train.py`: The PyTorch training loop with validation and loss tracking.
+* `visualizations.py`: Generates presentation-ready spectrograms and comparative plots.
+
+**Note:** For access to the dataset, please contact owner. 
