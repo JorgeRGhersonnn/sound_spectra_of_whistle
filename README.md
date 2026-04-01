@@ -10,6 +10,8 @@ This repository contains a complete machine learning pipeline that predicts the 
 * `dataset.py`: Custom PyTorch `Dataset` and `DataLoader` for batching.
 * `models.py`: Defines the 1D-CNN architecture.
 * `train.py`: The PyTorch training loop with validation and loss tracking.
+* `tree_models.py`: Evaluates the data under 2 tree models: (a) Random Forest, and (b) XGBoost Regressor.
 * `visualizations.py`: Generates presentation-ready spectrograms and comparative plots.
 
-**Note:** For access to the dataset, please contact owner. 
+**Note 1:** For access to the dataset, please contact owner. 
+**Note 2:** The use of artificial intelligence was implemented to test code ideas for this project.

@@ -18,8 +18,8 @@ os.makedirs(PROCESSED_DIR, exist_ok=True) # ensure the directory exists.
 
 # GLOBAL ACOUSTIC HYPERPARAMETERS 
 fs = 48000          # Sampling Frequency (Hz)
-f_min = 0         # Minimum Frequency for Extraction (Hz)
-f_max = 50000       # Maximum Frequency for Extraction (Hz)
+f_min = 100         # Minimum Frequency for Extraction (Hz)
+f_max = 20000       # Maximum Frequency for Extraction (Hz)
 epsilon = 1e-12     # Small constant to prevent log(0)
 
 # SPECTROGRAM PARAMETERS 
