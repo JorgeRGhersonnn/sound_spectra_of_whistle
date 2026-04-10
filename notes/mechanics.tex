@@ -1,0 +1,24 @@
+
+\section{Mechanics of Sound}
+Sound is a longitudinal wave that propagates through a medium (like air) due to the vibration of particles.
+The sound spectrum of a whistle is influenced by several factors, including the geometry of the whistle, the flow rate of the air, and 
+the pressure conditions -- as featured in \ref{exploratory_analysis}. The mass flow rate, in particular, 
+affects the velocity of the air passing through the whistle, which consequently influences the frequency and amplitude of the 
+sound produced. \\
+
+\textbf{Quick Note:} From now on, I will use multivariable calculus to derive how this is a one-dimensional problem. Feel free to skip this 
+section if you are not familiar with it. \\
+
+Let \(u(\mathbf{k}\cdot\mathbf{r} -vt, t)\) represent the displacement of the sound wave with wave number \(\mathbf{k}\) at 
+position \(\mathbf{r}\) during some time \(t\). The wave equation in three dimensions is given by: 
+
+\begin{equation}\label{wave_equation_3d_simple}
+        \nabla^2 u - \frac{1}{c^2}\frac{\partial^2 u}{\partial t^2} = 0.
+\end{equation}
+
+For our case, we assume that the sound wave is propagating primarily in one direction (say, along the \(\hat{x}\) axis), which allows us to simplify 
+the wave equation to one dimension:
+
+\begin{equation}\label{wave_equation_1d_simple}
+        \frac{\partial^2 u}{\partial x^2} - \frac{1}{c^2}\frac{\partial^2 u}{\partial t^2} = 0.
+\end{equation}

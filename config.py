@@ -23,13 +23,19 @@ f_max = 20000       # Maximum Frequency for Extraction (Hz)
 epsilon = 1e-12     # Small constant to prevent log(0)
 
 # SPECTROGRAM PARAMETERS 
-spec_nperseg = 1024 
-spec_noverlap = 512 
-spec_window = 'hann'
-spec_vmin_db = -60  # 60 dB dynamic range for noise floor clipping. 
+spec_nperseg = 1024         # Window size for spectrogram generation. Larger windows give better frequency resolution but worse time resolution.
+spec_noverlap = 512         # Overlap between windows for spectrogram generation.
+spec_window = 'hann'        # Window type for spectrogram generation 
+spec_vmin_db = -120         # Dynamic range for noise floor clipping. 
 
 # WELCH'S METHOD PARAMETERS
 welch_npserseg = 4096 
 welch_window = 'hann'
-welch_vmin_db = -60 
+welch_vmin_db = -120 
+
+# STFT PARAMETERS (for 2D representation)
+stft_nperseg = 512      # Window size for STFT
+stft_noverlap = 256     # Overlap between windows
+stft_window = 'hann'
+stft_vmin_db = -120      # Dynamic range for noise floor clipping
 

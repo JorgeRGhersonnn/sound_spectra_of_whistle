@@ -54,12 +54,45 @@ def generate_welch_psd(signal_matrix, fs):
 
     return f, psd_norm
 
+def generate_stft_spectrograms(signal_matrix, fs):
+    # Generates Short-Time Fourier Transform spectrograms for 2D representation.
+    # Output shape: (num_samples, num_freq_bins, num_time_frames)
+    print("Generating STFT Spectrograms...")
+    stft_list = []
+    
+    for sig in signal_matrix:
+        # Compute STFT
+        f, t, Zxx = sp.signal.stft(
+            sig,
+            fs=fs,
+            nperseg=config.stft_nperseg,
+            noverlap=config.stft_noverlap,
+            window=config.stft_window
+        )
+        
+        # Convert to magnitude and then dB
+        Zxx_mag = np.abs(Zxx)
+        Zxx_db = 20 * np.log10(Zxx_mag + config.epsilon)
+        
+        stft_list.append(Zxx_db)
+    
+    # Stack all spectrograms: (num_samples, num_freq_bins, num_time_frames)
+    stft_all = np.array(stft_list)
+    
+    # Normalize by global max
+    stft_norm = stft_all - np.max(stft_all)
+    
+    # Clip the noise floor
+    stft_norm = np.clip(stft_norm, a_min=config.stft_vmin_db, a_max=0)
+    
+    return f, t, stft_norm
+
 def process_and_save(): 
     # Main pipeline to load, process, and save the data for CNN. 
     # 1. Load data 
     P_all, frequency, signals, amplitudes, mass_flows = load_raw_data(config.DATA_PATH)
 
-    # 2. Process Data 
+    # 2. Process 1D PSD Data (Welch's Method)
     freqs, psd_features = generate_welch_psd(signals, config.fs)
 
     # filter frequency range of interest 
@@ -67,16 +100,36 @@ def process_and_save():
     freqs_cropped = freqs[mask]
     psd_features_cropped = psd_features[:, mask]
 
-    print(f"Final feature shape (Samples, Frequencies): {psd_features_cropped.shape}")
+    print(f"1D PSD feature shape (Samples, Frequencies): {psd_features_cropped.shape}")
 
-    # 3. Save data as NumPy arrays for ML pipeline 
-    features_path = os.path.join(config.PROCESSED_DIR, "psd_features.npy")
+    # 3. Process 2D STFT Data  
+    stft_freqs, stft_times, stft_features = generate_stft_spectrograms(signals, config.fs)
+    
+    # Filter frequency range
+    freq_mask = (stft_freqs >= config.f_min) & (stft_freqs <= config.f_max)
+    stft_freqs_cropped = stft_freqs[freq_mask]
+    stft_features_cropped = stft_features[:, freq_mask, :]
+    
+    print(f"2D STFT feature shape (Samples, Frequencies, Times): {stft_features_cropped.shape}")
+
+    # 4. Save data as NumPy arrays for ML pipeline 
+    # 1D PSD data
+    psd_features_path = os.path.join(config.PROCESSED_DIR, "psd_features.npy")
     labels_path = os.path.join(config.PROCESSED_DIR, "mass_flow_labels.npy")
     freqs_path = os.path.join(config.PROCESSED_DIR, "frequencies.npy")
 
-    np.save(features_path, psd_features_cropped)
+    np.save(psd_features_path, psd_features_cropped)
     np.save(labels_path, mass_flows)
     np.save(freqs_path, freqs_cropped)
+    
+    # 2D STFT data
+    stft_features_path = os.path.join(config.PROCESSED_DIR, "stft_features.npy")
+    stft_freqs_path = os.path.join(config.PROCESSED_DIR, "stft_frequencies.npy")
+    stft_times_path = os.path.join(config.PROCESSED_DIR, "stft_times.npy")
+    
+    np.save(stft_features_path, stft_features_cropped)
+    np.save(stft_freqs_path, stft_freqs_cropped)
+    np.save(stft_times_path, stft_times)
 
     print(f"Data successfully processed and saved to {config.PROCESSED_DIR}")
 
