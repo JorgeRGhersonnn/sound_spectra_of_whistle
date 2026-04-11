@@ -83,7 +83,7 @@ def plot_global_spectrogram(freqs, psd, mass_flows):
 
     plt.figure(figsize=(10, 6))
     mesh = plt.pcolormesh(freqs, sorted_flows, sorted_psd,
-                          shading='auto', cmap='magma',
+                          shading='auto', cmap='viridis',
                           vmin=config.welch_vmin_db, vmax=0)
     
     plt.title("Global Whistle Spectrum Across All Mass Flow Rates")

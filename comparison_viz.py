@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.gridspec import GridSpec
+from matplotlib.ticker import MaxNLocator, FuncFormatter
 import os
 import config
 
@@ -129,15 +130,17 @@ def plot_percentile_grid(data, output_dir="plots"):
         ax2 = fig.add_subplot(gs[row, 1])
         stft = data['stft'][idx]  # shape: (freq_bins, time_frames)
         im = ax2.pcolormesh(data['stft_times'], data['stft_freqs'], stft,
-                            shading='auto', cmap='magma',
+                            shading='auto', cmap='viridis',
                             vmin=config.stft_vmin_db, vmax=0)
         ax2.set_ylabel("Frequency (Hz)")
         ax2.set_title(f"{p}th Percentile (m={mass_flow:.2f} kg/hr) - 2D STFT")
         ax2.set_yscale('log')
+        ax2.yaxis.set_major_locator(MaxNLocator(nbins=6))
         
         # Only add colorbar to rightmost column
         if row == 0:
             cbar = plt.colorbar(im, ax=ax2, label="Magnitude (dB)")
+            cbar.ax.tick_params(labelsize=9)
     
     # Common x-label for bottom row
     fig.add_subplot(gs[4, 0]).set_xlabel("Frequency (Hz)")
@@ -154,55 +157,61 @@ def plot_percentile_grid(data, output_dir="plots"):
 
 def plot_contrast_pairs(data, output_dir="plots"):
     """
-    Create side-by-side comparisons for extreme contrast pairs:
-    - Top row: Low mass flow
-    - Bottom row: High mass flow
-    Each pair shows 1D PSD and 2D STFT.
+    Create separate figures for each percentile pair sample with 1x2 subplots:
+    - Column 1: 1D PSD Model
+    - Column 2: 2D STFT Model
+    Emphasizes model contrast for each selected sample from percentile pairs.
     """
     os.makedirs(output_dir, exist_ok=True)
     sampler = PercentileSampler(data['mass_flows'])
     pairs = sampler.get_contrast_pairs()
     
     for pair_idx, pair in enumerate(pairs):
-        fig = plt.figure(figsize=(14, 8))
-        gs = GridSpec(2, 2, figure=fig, hspace=0.35, wspace=0.3)
-        
-        for row, flow_type in enumerate(['low', 'high']):
+        for flow_type in ['low', 'high']:
             idx = pair[flow_type]
             mass_flow = data['mass_flows'][idx]
-            
-            # --- Column 1: 1D PSD ---
-            ax1 = fig.add_subplot(gs[row, 0])
-            psd = data['psd'][idx]
+            flow_label = f"Low Flow ({mass_flow:.2f} kg/hr)" if flow_type == 'low' else f"High Flow ({mass_flow:.2f} kg/hr)"
             color = '#0460a1' if flow_type == 'low' else '#700c0c'
+            
+            fig = plt.figure(figsize=(14, 5))
+            gs = GridSpec(1, 2, figure=fig, hspace=0.3, wspace=0.35)
+            
+            # --- Column 1: 1D PSD Model ---
+            ax1 = fig.add_subplot(gs[0, 0])
+            psd = data['psd'][idx]
             ax1.plot(data['freqs'], psd, color=color, linewidth=2, alpha=0.85)
-            ax1.set_ylabel("Power (dB)")
-            flow_label = f"Low Flow - {mass_flow:.2f} kg/hr" if flow_type == 'low' else f"High Flow - {mass_flow:.2f} kg/hr"
-            ax1.set_title(f"{flow_label} - 1D PSD")
+            ax1.set_ylabel("Power (dB)", fontsize=11)
+            ax1.set_xlabel("Frequency (Hz)", fontsize=11)
+            ax1.set_title("1D PSD Model", fontsize=12, pad=10)
             ax1.set_xscale('log')
             ax1.grid(True, alpha=0.3)
+            ax1.xaxis.set_major_locator(MaxNLocator(nbins=5))
             
-            # --- Column 2: 2D STFT ---
-            ax2 = fig.add_subplot(gs[row, 1])
+            # --- Column 2: 2D STFT Model ---
+            ax2 = fig.add_subplot(gs[0, 1])
             stft = data['stft'][idx]
             im = ax2.pcolormesh(data['stft_times'], data['stft_freqs'], stft,
-                                shading='auto', cmap='magma',
+                                shading='auto', cmap='viridis',
                                 vmin=config.stft_vmin_db, vmax=0)
-            ax2.set_ylabel("Frequency (Hz)")
-            ax2.set_title(f"{flow_label} - 2D STFT")
+            ax2.set_ylabel("Frequency (Hz)", fontsize=11)
+            ax2.set_xlabel("Time (s)", fontsize=11)
+            ax2.set_title("2D STFT Model", fontsize=12, pad=10)
             ax2.set_yscale('log')
-            plt.colorbar(im, ax=ax2, label="Magnitude (dB)")
-        
-        # Common x-labels
-        fig.add_subplot(gs[1, 0]).set_xlabel("Frequency (Hz)")
-        fig.add_subplot(gs[1, 1]).set_xlabel("Time (s)")
-        
-        plt.suptitle(f"Contrast Comparison: {pair['label']}", fontsize=14, y=0.995)
-        
-        filename = f"contrast_pair_{pair_idx + 1}_{pair['label'].replace(' ', '_').replace('th', '')}.png"
-        plt.savefig(os.path.join(output_dir, filename), dpi=300, bbox_inches='tight')
-        print(f"✓ Saved {pair['label']} contrast pair to {output_dir}/{filename}")
-        plt.close()
+            
+            # Limit y-axis ticks to prevent overlap
+            ax2.yaxis.set_major_locator(MaxNLocator(nbins=6))
+            ax2.yaxis.set_major_formatter(FuncFormatter(lambda x, p: f'{int(x)}' if x >= 1000 else f'{x:.0f}'))
+            
+            cbar = plt.colorbar(im, ax=ax2, label="Magnitude (dB)")
+            cbar.ax.tick_params(labelsize=9)
+            
+            plt.suptitle(f"Model Contrast: {flow_label} ({pair['label']})", fontsize=13, y=0.98)
+            
+            flow_desc = "low" if flow_type == 'low' else "high"
+            filename = f"model_contrast_{pair_idx + 1}_{pair['label'].replace(' ', '_').replace('th', '')}_{flow_desc}.png"
+            plt.savefig(os.path.join(output_dir, filename), dpi=300, bbox_inches='tight')
+            print(f"✓ Model Contrast: {flow_label} ({pair['label']}) → {output_dir}/{filename}")
+            plt.close()
 
 
 def plot_all_percentiles_overlay(data, output_dir="plots"):
@@ -249,7 +258,7 @@ def plot_stft_heatmap_progression(data, output_dir="plots"):
     sampler = PercentileSampler(data['mass_flows'])
     percentile_indices = sampler.get_percentile_indices()
     
-    fig, axes = plt.subplots(1, 5, figsize=(20, 4))
+    fig, axes = plt.subplots(1, 5, figsize=(22, 5))
     
     for col, p in enumerate(sampler.percentiles):
         idx = percentile_indices[p]
@@ -257,15 +266,16 @@ def plot_stft_heatmap_progression(data, output_dir="plots"):
         stft = data['stft'][idx]
         
         im = axes[col].pcolormesh(data['stft_times'], data['stft_freqs'], stft,
-                                  shading='auto', cmap='magma',
+                                  shading='auto', cmap='viridis',
                                   vmin=config.stft_vmin_db, vmax=0)
-        axes[col].set_title(f"{p}th Percentile\n({mass_flow:.1f} kg/hr)")
+        axes[col].set_title(f"{p}th Percentile\n({mass_flow:.1f} kg/hr)", fontsize=11)
         axes[col].set_yscale('log')
         axes[col].set_ylabel("Frequency (Hz)" if col == 0 else "")
         axes[col].set_xlabel("Time (s)")
+        axes[col].yaxis.set_major_locator(MaxNLocator(nbins=5))
         plt.colorbar(im, ax=axes[col], label="dB")
     
-    plt.suptitle("STFT Spectrogram Progression Across Percentiles", fontsize=14, y=1.02)
+    plt.suptitle("STFT Spectrogram Progression Across Percentiles", fontsize=14, y=1.00)
     plt.tight_layout()
     
     plt.savefig(os.path.join(output_dir, "stft_percentile_heatmaps.png"),

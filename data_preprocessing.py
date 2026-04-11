@@ -79,8 +79,10 @@ def generate_stft_spectrograms(signal_matrix, fs):
     # Stack all spectrograms: (num_samples, num_freq_bins, num_time_frames)
     stft_all = np.array(stft_list)
     
-    # Normalize by global max
-    stft_norm = stft_all - np.max(stft_all)
+    # Normalize by percentile to balance weak and strong signals
+    # This prevents high-flow samples from being washed out by low-flow peaks
+    percentile_value = np.percentile(stft_all, config.stft_percentile)
+    stft_norm = stft_all - percentile_value
     
     # Clip the noise floor
     stft_norm = np.clip(stft_norm, a_min=config.stft_vmin_db, a_max=0)

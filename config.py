@@ -37,5 +37,6 @@ welch_vmin_db = -120
 stft_nperseg = 512      # Window size for STFT
 stft_noverlap = 256     # Overlap between windows
 stft_window = 'hann'
-stft_vmin_db = -120      # Dynamic range for noise floor clipping
+stft_vmin_db = -60       # Dynamic range for noise floor clipping (improved visibility)
+stft_percentile = 99     # Percentile for robust normalization across samples
 

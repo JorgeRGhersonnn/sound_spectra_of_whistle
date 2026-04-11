@@ -15,3 +15,6 @@ plots/
 
 # OS generated files
 .DS_Store
+
+# Media files 
+media/
