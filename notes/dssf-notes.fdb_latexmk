@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1775799928.24929 "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" "dssf-notes.pdf" "dssf-notes" 1775799929.12647 0
+["pdflatex"] 1776018577.24479 "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" "dssf-notes.pdf" "dssf-notes" 1776018577.9617 0
   "/etc/texmf/web2c/texmf.cnf" 1749166900.55071 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" 1775799863.29509 4289 f01cf25e4abd2765f330dae9ba093049 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -169,13 +169,13 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1749166912.44061 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1749166927 8213316 0c961fb3aaf48317b0fbd22960b63bf1 ""
-  "dssf-notes.aux" 1775799929.03998 9524 fbe0b52ef31b41b7971644dadd4f0494 "pdflatex"
-  "dssf-notes.out" 1775799929.04198 9924 c1a7ea5d747bf519d499e4552a2cc9f4 "pdflatex"
+  "dssf-notes.aux" 1776018577.89669 9952 a8ab1039a5d53722e31aa8414d5c6b14 "pdflatex"
+  "dssf-notes.out" 1776018577.89669 10410 36d7ac5cf56fb1b7c68612d965dd93ec "pdflatex"
   "dssf-notes.tex" 1775799863.29509 4289 f01cf25e4abd2765f330dae9ba093049 ""
-  "dssf-notes.toc" 1775799929.04198 4862 9177bbcbe99303296858635ee82d71cd "pdflatex"
+  "dssf-notes.toc" 1776018577.89769 5146 9b3544ea063fdfe576abb7786a47e9f9 "pdflatex"
   "exploratory-analysis.tex" 1775775285.24625 5571 c1f53d2cd75ca7212e03e6eebae55d45 ""
   "images/spectrum_flowrate_afterFFT.png" 1773911520.98802 290862 6f81df7adc58caf0bab1b436441fe582 ""
-  "software-implementation.tex" 1775799928.21498 32008 b592224e1db5c8d746baf6a85b42b2c3 ""
+  "software-implementation.tex" 1776018577.12969 33215 b0000714fe7ee32a3917788015df7603 ""
   (generated)
   "dssf-notes.aux"
   "dssf-notes.log"

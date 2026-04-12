@@ -21,14 +21,15 @@ without editing multiple files.
         \item \verb|f_max = 20000|: Maximum frequency for extraction (Hz)
         \item \verb|epsilon = 1e-12|: Small constant to prevent $\log(0)$ errors
     \end{itemize}
-    \item \textbf{Spectrogram Parameters:} Settings for scipy's spectrogram function (\verb|spec_nperseg|, \verb|spec_noverlap|, \verb|spec_window|)
+    \item \textbf{Spectrogram Parameters:} Settings for scipy's spectrogram function (\verb|spec_nperseg|, \verb|spec_noverlap|, 
+    and, \verb|spec_window|)
     \item \textbf{Welch's Method Parameters:} Settings for 1D PSD estimation. 
     \begin{itemize}
         \item \verb|welch_nperseg = 4096| 
         \item \verb|welch_window = 'hann'| 
         \item \verb|welch_vmin_db = -120|
     \end{itemize}
-    \item \textbf{STFT Parameters:} Settings for 2D time-frequency representation.
+    \item \textbf{Short-Time Fourier Transform (STFT) Parameters:} Settings for 2D time-frequency representation.
     \begin{itemize}
         \item \verb|stft_nperseg = 512|: Window size for STFT (provides time-frequency tradeoff)
         \item \verb|stft_noverlap = 256|: 50\% window overlap
@@ -46,24 +47,7 @@ below the noise level and preventing the model from learning noise artifacts. Th
 This file implements the core signal processing pipeline that transforms raw acoustic signals into 
 both 1D Power Spectral Density (PSD) and 2D time-frequency representations suitable for machine learning.
 
-\subsubsection{Processing Steps:}
-
-\textbf{Step 1: Load Raw Data}
-
-\begin{verbatim}
-    load_raw_data(filepath) -> (P_all, frequency, signal_all, amplitude_all, m_dot_all)
-\end{verbatim}
-
-Uses \verb|scipy.io.loadmat()| to load the MATLAB data file. The raw signals are unpacked and flattened 
-from nested structures into 2D NumPy arrays:
-
-\begin{itemize}
-    \item \verb|signal_all|: Raw microphone signals at 100 kHz sampling rate -- Shape (267, 100000).
-    \item \verb|m_dot_all|: Mass flow rates in kg/hr -- Shape (267,).  
-\end{itemize}
-
-\textbf{General Processing Framework}
-
+\subsubsection{General Processing Framework}
 Both 1D PSD and 2D STFT representations follow a common post-processing pipeline: \textit{magnitude estimation} 
 (if complex-valued), \textit{logarithmic scaling}, \textit{normalization}, and \textit{clipping}. 
 We define generic operations and then instantiate them for each representation.
@@ -87,86 +71,7 @@ and the clipped output is given by:
 
 where $X_{\min}$ is the minimum decibel threshold (noise floor). \\
 
-\textbf{Step 2: Compute Power Spectral Density using Welch's Method}
-
-\begin{verbatim}
-    generate_welch_psd(signal_matrix, fs) -> (frequencies, psd_normalized)
-\end{verbatim}
-
-Applies Welch's method to reduce noise and improve PSD estimation. For each signal:
-
-\begin{equation}\label{welch_psd}
-    f, P_{xx} = \text{scipy.signal.welch}(s, fs=48000, nperseg=4096, window=\text{'hann'}).
-\end{equation}
-
-The output is converted to decibels using \eqref{log_scale} with $c=10$ (power):
-
-\begin{equation}\label{psd_db}
-    P_{xx,dB} = 10 \log_{10}(P_{xx} + \epsilon).
-\end{equation}
-
-Then normalized using \eqref{normalize}:
-
-\begin{equation}\label{psd_normalized}
-    P_{xx,\text{norm}} = P_{xx,dB} - \max(P_{xx,dB}).
-\end{equation}
-
-Finally, clipped using \eqref{clip} with $X_{\min} = -120$ dB:
-
-\begin{equation}\label{psd_clipped}
-    P_{xx,\text{clipped}} = \text{clip}(P_{xx, \text{norm}}, -120, 0).
-\end{equation}\\ 
-
-\textbf{Step 3: Frequency Range Filtering}
-
-The processed PSD features are filtered to only include frequencies between \verb|f_min| and \verb|f_max| 
-using boolean masking:
-
-\begin{verbatim}
-    mask = (freqs >= config.f_min) & (freqs <= config.f_max)
-    psd_features_cropped = psd_features[:, mask]
-\end{verbatim}
-
-This reduces the feature dimensionality from $\approx 12000$ bins to 1698 
-bins (for the default configuration). \\
-
-\textbf{Step 4: Generate STFT Spectrograms for 2D Representation}
-
-\begin{verbatim}
-    generate_stft_spectrograms(signal_matrix, fs) -> (frequencies, times, stft_normalized)
-\end{verbatim}
-
-Generates Short-Time Fourier Transform spectrograms for 2D time-frequency analysis. For each signal:
-
-\begin{equation}\label{stft}
-    f, t, Z_{xx} = \text{scipy.signal.stft}(s, fs=48000, nperseg=512, noverlap=256, window=\text{'hann'}).
-\end{equation}
-
-The complex-valued STFT is converted to magnitude spectrum:
-
-\begin{equation}\label{stft_mag}
-    |Z_{xx}| = \sqrt{\text{Re}(Z_{xx})^2 + \text{Im}(Z_{xx})^2}.
-\end{equation}
-
-Then converted to decibels using Eq. \eqref{log_scale} with $c=20$ (magnitude):
-
-\begin{equation}\label{stft_db}
-    Z_{xx,dB} = 20 \log_{10}(|Z_{xx}| + \epsilon).
-\end{equation}
-
-Normalized using Eq. \eqref{normalize}:
-
-\begin{equation}\label{stft_normalized}
-    Z_{xx,\text{norm}} = Z_{xx,dB} - \max(Z_{xx,dB}).
-\end{equation}
-
-Finally, clipped using Eq. \eqref{clip} with $X_{\min} = -120$ dB:
-
-\begin{equation}\label{stft_clipped}
-    Z_{xx,\text{clipped}} = \text{clip}(Z_{xx, \text{norm}}, -120, 0).
-\end{equation} \\
-
-\textbf{Output Format:}
+\subsubsection{Output Format}
 The STFT produces a 3D array with shape \verb|Samples, FrequencyBins, TimeFrames|:
 
 \begin{itemize}
@@ -175,7 +80,7 @@ The STFT produces a 3D array with shape \verb|Samples, FrequencyBins, TimeFrames
     \item Time Frames: 392 (based on 512-point windows with 256-point overlap)
 \end{itemize}
 
-\textbf{Complete Output:}
+\subsubsection{Complete Output}
 Six NumPy files are saved to \verb|processed_data/|:
 \begin{itemize}
     \item \textbf{1D PSD Data:}
@@ -192,10 +97,102 @@ Six NumPy files are saved to \verb|processed_data/|:
     \item \verb|mass_flow_labels.npy|: Target labels -- Shape (267,)
 \end{itemize}
 
+\subsubsection{Processing Steps}
 
-\textbf{Step 5: Frequency Range Filtering}
+\begin{enumerate}
+    \item \textbf{Step 1: Load Raw Data} \\ 
+    \begin{verbatim}
+        load_raw_data(filepath) -> (P_all, frequency, signal_all, 
+                                    amplitude_all, m_dot_all)
+    \end{verbatim} 
 
-Both 1D and 2D features are filtered to only include frequencies between \verb|f_min| and \verb|f_max|.
+    Uses \verb|scipy.io.loadmat()| to load the MATLAB data file. The raw signals are unpacked and flattened 
+    from nested structures into 2D NumPy arrays:
+    \begin{itemize}
+        \item \verb|signal_all|: Raw microphone signals at 100 kHz sampling rate -- Shape (267, 100000).
+        \item \verb|m_dot_all|: Mass flow rates in kg/hr -- Shape (267,).  
+    \end{itemize}
+
+    \item \textbf{Step 2: Compute Power Spectral Density using Welch's Method} \\
+    \begin{verbatim}
+        generate_welch_psd(signal_matrix, fs) -> (frequencies, psd_normalized)
+    \end{verbatim}
+
+    Applies Welch's method to reduce noise and improve PSD estimation. For each signal:
+
+    \begin{equation}\label{welch_psd}
+        f, P_{xx} = \text{scipy.signal.welch}(s, fs=48000, nperseg=4096, window=\text{'hann'}).
+    \end{equation}
+
+    The output is converted to decibels using \eqref{log_scale} with $c=10$ (power):
+
+    \begin{equation}\label{psd_db}
+        P_{xx,dB} = 10 \log_{10}(P_{xx} + \epsilon).
+    \end{equation}
+
+    Then normalized using \eqref{normalize}:
+
+    \begin{equation}\label{psd_normalized}
+        P_{xx,\text{norm}} = P_{xx,dB} - \max(P_{xx,dB}).
+    \end{equation}
+
+    Finally, clipped using \eqref{clip} with $X_{\min} = -120$ dB:
+
+    \begin{equation}\label{psd_clipped}
+        P_{xx,\text{clipped}} = \text{clip}(P_{xx, \text{norm}}, -120, 0).
+    \end{equation}
+
+    \item \textbf{Step 3: Frequency Range Filtering} \\
+    The processed PSD features are filtered to only include frequencies between \verb|f_min| and \verb|f_max| 
+    using boolean masking:
+
+    \begin{verbatim}
+        mask = (freqs >= config.f_min) & (freqs <= config.f_max)
+        psd_features_cropped = psd_features[:, mask]
+    \end{verbatim}
+
+    This reduces the feature dimensionality from $\approx 12000$ bins to 1698 
+    bins (for the default configuration). 
+
+    \item \textbf{Step 4: Generate STFT Spectrograms for 2D Representation} \\
+    \begin{verbatim}
+        generate_stft_spectrograms(signal_matrix, fs) -> (frequencies, times, 
+                                                            stft_normalized)
+    \end{verbatim}
+
+    Generates Short-Time Fourier Transform spectrograms for 2D time-frequency analysis. For each signal:
+
+    \begin{equation}\label{stft}
+        f, t, Z_{xx} = \text{scipy.signal.stft}(s, fs=48000, nperseg=512, noverlap=256, window=\text{'hann'}).
+    \end{equation}
+
+    The complex-valued STFT is converted to magnitude spectrum:
+
+    \begin{equation}\label{stft_mag}
+        |Z_{xx}| = \sqrt{\text{Re}(Z_{xx})^2 + \text{Im}(Z_{xx})^2}.
+    \end{equation}
+
+    Then converted to decibels using Eq. \eqref{log_scale} with $c=20$ (magnitude):
+
+    \begin{equation}\label{stft_db}
+        Z_{xx,dB} = 20 \log_{10}(|Z_{xx}| + \epsilon).
+    \end{equation}
+
+    Normalized using Eq. \eqref{normalize}:
+
+    \begin{equation}\label{stft_normalized}
+        Z_{xx,\text{norm}} = Z_{xx,dB} - \max(Z_{xx,dB}).
+    \end{equation}
+
+    Finally, clipped using Eq. \eqref{clip} with $X_{\min} = -120$ dB:
+
+    \begin{equation}\label{stft_clipped}
+        Z_{xx,\text{clipped}} = \text{clip}(Z_{xx, \text{norm}}, -120, 0).
+    \end{equation} 
+
+    \item \textbf{Step 5: Frequency Range Filtering} \\
+    Both 1D and 2D features are filtered to only include frequencies between \verb|f_min| and \verb|f_max|.
+\end{enumerate}
 
 \subsection{Dataset Creation (\texttt{dataset.py})}
 
@@ -204,118 +201,121 @@ batch processing during model training. It supports both 1D PSD and 2D STFT repr
 
 \subsubsection{Key Components:}
 
-\textbf{WhistleDataset Class (1D PSD):}
-A custom PyTorch \verb|Dataset| subclass that:
 \begin{enumerate}
-    \item Loads preprocessed 1D PSD NumPy arrays
-    \item Converts them to PyTorch tensors with dtype \verb|float32|
-    \item Adds a channel dimension via \verb|unsqueeze(1)|
+    \item \textbf{WhistleDataset Class (1D PSD)} \\
+    A custom PyTorch \verb|Dataset| subclass that:
+    \begin{enumerate}
+        \item Loads preprocessed 1D PSD NumPy arrays
+        \item Converts them to PyTorch tensors with dtype \verb|float32|
+        \item Adds a channel dimension via \verb|unsqueeze(1)|
     
-    Shape transformation: $(267, 1698) \rightarrow (267, 1, 1698)$
+        Shape transformation: $(267, 1698) \rightarrow (267, 1, 1698)$
     
-    This is required because 1D CNNs expect $(Batch, Channels, Length)$ format.
-\end{enumerate}
+        This is required because 1D CNNs expect $(Batch, Channels, Length)$ format.
+    \end{enumerate}
 
-\textbf{WhistleDataset2D Class (2D STFT):}
-A custom PyTorch \verb|Dataset| subclass for STFT spectrograms:
-\begin{enumerate}
-    \item Loads preprocessed 2D STFT NumPy arrays
-    \item Converts them to PyTorch tensors with dtype \verb|float32|
-    \item Adds a channel dimension via \verb|unsqueeze(1)|
-    
-    Shape transformation: $(267, 212, 392) \rightarrow (267, 1, 212, 392)$
-    
-    This is required because 2D CNNs expect $(Batch, Channels, Height, Width)$ format, 
-    where Height = Frequency bins and Width = Time frames.
-\end{enumerate}
+    \item \textbf{WhistleDataset2D Class (2D STFT)} \\
+    A custom PyTorch \verb|Dataset| subclass for STFT spectrograms:
+    \begin{enumerate}
+        \item Loads preprocessed 2D STFT NumPy arrays
+        \item Converts them to PyTorch tensors with dtype \verb|float32|
+        \item Adds a channel dimension via \verb|unsqueeze(1)|
+        
+        Shape transformation: $(267, 212, 392) \rightarrow (267, 1, 212, 392)$
+        
+        This is required because 2D CNNs expect $(Batch, Channels, Height, Width)$ format, 
+        where Height = Frequency bins and Width = Time frames.
+    \end{enumerate}
 
-\textbf{get\_dataloaders() Function (1D PSD):}
-
-\begin{verbatim}
+    \item \textbf{get\_dataloaders() Function (1D PSD)} \\
+    \begin{verbatim}
     train_loader, test_loader = get_dataloaders(batch_size=16, test_size=0.2)
-\end{verbatim}
+    \end{verbatim}
 
-Performs 80/20 train-test split and wraps datasets in \verb|DataLoader| objects with \verb|shuffle=True| 
-to prevent the model from learning the order of examples.
+    Performs 80/20 train-test split and wraps datasets in \verb|DataLoader| objects with \verb|shuffle=True| 
+    to prevent the model from learning the order of examples. \\
 
-\textbf{get\_dataloaders\_2d() Function (2D STFT):}
+    \textbf{Output Format (1D)}
+    Each batch contains:
+    \begin{itemize}
+        \item \verb|features|: Tensor of shape $(16, 1, 1698)$
+        \item \verb|labels|: Tensor of shape $(16, 1)$
+    \end{itemize}
 
-\begin{verbatim}
-    train_loader_2d, test_loader_2d = get_dataloaders_2d(batch_size=16, test_size=0.2)
-\end{verbatim}
+    \item \textbf{get\_dataloaders\_2d() Function (2D STFT)} \\
+    \begin{verbatim}
+        train_loader_2d, test_loader_2d = get_dataloaders_2d(batch_size=16, 
+                                                            test_size=0.2)
+    \end{verbatim}
 
-Performs 80/20 train-test split for 2D STFT data with the same configuration as the 1D dataloader.
+    Performs 80/20 train-test split for 2D STFT data with the same configuration as the 1D dataloader. \\
 
-\textbf{Output Format (1D):}
-Each batch contains:
-\begin{itemize}
-    \item \verb|features|: Tensor of shape $(16, 1, 1698)$
-    \item \verb|labels|: Tensor of shape $(16, 1)$
-\end{itemize}
-
-\textbf{Output Format (2D):}
-Each batch contains:
-\begin{itemize}
-    \item \verb|features|: Tensor of shape $(16, 1, 212, 392)$ (Batch, Channels, Freq, Time)
-    \item \verb|labels|: Tensor of shape $(16, 1)$
-\end{itemize}
+    \textbf{Output Format (2D)}
+    Each batch contains:
+    \begin{itemize}
+        \item \verb|features|: Tensor of shape $(16, 1, 212, 392)$ (Batch, Channels, Freq, Time)
+        \item \verb|labels|: Tensor of shape $(16, 1)$
+    \end{itemize}
+\end{enumerate}
 
 \subsection{Model Architecture (\texttt{models.py})}
 
 This file defines the neural network architecture that maps acoustic spectra 
 to mass flow rate predictions.
 
-\subsubsection{WhistleCNN Architecture:}
+\subsubsection{WhistleCNN Architecture}
 The model consists of two main components:
 
-\textbf{Convolutional Feature Extractor:}
-A sequence of three convolutional blocks, each containing:
 \begin{enumerate}
-    \item \textbf{1D Convolution}: Applies learnable filters to detect spectral features
-    \begin{equation}\label{conv1d}
-        \text{output}_i = \sum_{j=0}^{K-1} w_j \cdot \text{input}_{i+j} + b
-    \end{equation}
-    where $K=5$ (kernel size)
-    
-    \item \textbf{ReLU Activation}: Introduces non-linearity
-    \begin{equation}\label{relu}
-        h = \max(0, x)
-    \end{equation}
-    
-    \item \textbf{Max Pooling}: Downsamples feature maps with stride of 2
-    \begin{equation}\label{max_pool}
-        \text{pool}_i = \max(\text{conv}_{2i}, \text{conv}_{2i+1})
-    \end{equation}
+    \item \textbf{Convolutional Feature Extractor}
+    A sequence of three convolutional blocks, each containing:
+    \begin{enumerate}
+        \item \textbf{1D Convolution}: Applies learnable filters to detect spectral features
+        \begin{equation}\label{conv1d}
+            \text{output}_i = \sum_{j=0}^{K-1} w_j \cdot \text{input}_{i+j} + b
+        \end{equation}
+        where $K=5$ (kernel size)
+        
+        \item \textbf{ReLU Activation}: Introduces non-linearity
+        \begin{equation}\label{relu}
+            h = \max(0, x)
+        \end{equation}
+        
+        \item \textbf{Max Pooling}: Downsamples feature maps with stride of 2
+        \begin{equation}\label{max_pool}
+            \text{pool}_i = \max(\text{conv}_{2i}, \text{conv}_{2i+1})
+        \end{equation}
+    \end{enumerate}
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Block} & \textbf{In Channels} & \textbf{Out Channels} & \textbf{Output Size} \\
+        \hline
+            Input & — & — & $(B, 1, 1698)$ \\
+            Conv Block 1 & 1 & 16 & $(B, 16, 849)$ \\
+            Conv Block 2 & 16 & 32 & $(B, 32, 424)$ \\
+            Conv Block 3 & 32 & 64 & $(B, 64, 212)$ \\
+            Adaptive Avg Pool & 64 & 64 & $(B, 64, 32)$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+
+    The \verb|AdaptiveAvgPool1d(32)| layer ensures that regardless of input size, the output is always 
+    64 channels \(\times\) 32 frequency bins = 2048 features. \\
+
+    \item \textbf{Fully Connected Regressor:}
+    \begin{verbatim}
+        Linear(2048, 128) -> ReLU -> Dropout(0.3) -> Linear(128, 32) -> ReLU -> Linear(32, 1)
+    \end{verbatim}
+
+    \begin{itemize}
+        \item Layer 1: Maps 2048 features to 128 hidden units
+        \item Dropout: Randomly zeros 30\% of activations during training to prevent overfitting
+        \item Layer 2: Maps 128 hidden units to 32 hidden units
+        \item Output Layer: Single neuron with linear activation for continuous regression
+    \end{itemize}
 \end{enumerate}
-
-\begin{center}
-    \begin{tabular}{|c|c|c|c|}
-    \hline
-    \textbf{Block} & \textbf{In Channels} & \textbf{Out Channels} & \textbf{Output Size} \\
-    \hline
-        Input & — & — & $(B, 1, 1698)$ \\
-        Conv Block 1 & 1 & 16 & $(B, 16, 849)$ \\
-        Conv Block 2 & 16 & 32 & $(B, 32, 424)$ \\
-        Conv Block 3 & 32 & 64 & $(B, 64, 212)$ \\
-        Adaptive Avg Pool & 64 & 64 & $(B, 64, 32)$ \\
-    \hline
-    \end{tabular}
-\end{center}
-
-The \verb|AdaptiveAvgPool1d(32)| layer ensures that regardless of input size, the output is always 
-64 channels \(\times\) 32 frequency bins = 2048 features. \\
-
-\textbf{Fully Connected Regressor:}
-\begin{verbatim}
-    Linear(2048, 128) -> ReLU -> Dropout(0.3) -> Linear(128, 32) -> ReLU -> Linear(32, 1)
-\end{verbatim}
-
-\begin{itemize}
-    \item Layer 1: Maps 2048 features to 128 hidden units
-    \item Dropout: Randomly zeros 30\% of activations during training to prevent overfitting
-    \item Layer 2: Maps 128 hidden units to 32 hidden units
-    \item Output Layer: Single neuron with linear activation for continuous regression
-\end{itemize}
 
 \textbf{Model Complexity:}
 Total parameters: $\approx 367,000$
@@ -334,60 +334,60 @@ Identical to the model in \verb|models.py|, this baseline uses only frequency in
 \end{itemize}
 
 \subsubsection{WhistleCNN2D Architecture (2D STFT):}
+A 2D convolutional architecture designed for time-frequency spectrograms:
 
-A novel 2D convolutional architecture designed for time-frequency spectrograms:
-
-\textbf{Convolutional Feature Extractor:}
-A sequence of four 2D convolutional blocks, each containing:
 \begin{enumerate}
-    \item \textbf{2D Convolution}: Applies learnable filters to detect spectrotemporal patterns
-    \begin{equation}\label{conv2d}
-        \text{output}_{i,j} = \sum_{u,v} w_{u,v} \cdot \text{input}_{i+u, j+v} + b
-    \end{equation}
-    where kernel size $K=5 \times 5$
-    
-    \item \textbf{Batch Normalization}: Normalizes activations to accelerate training
+    \item \textbf{Convolutional Feature Extractor} \\
+    A sequence of four 2D convolutional blocks, each containing:
+    \begin{enumerate}
+        \item \textbf{2D Convolution}: Applies learnable filters to detect spectrotemporal patterns
+        \begin{equation}\label{conv2d}
+            \text{output}_{i,j} = \sum_{u,v} w_{u,v} \cdot \text{input}_{i+u, j+v} + b
+        \end{equation}
+        where kernel size $K=5 \times 5$
+        
+        \item \textbf{Batch Normalization}: Normalizes activations to accelerate training
 
-    \begin{equation}\label{batchnorm}
-        \hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}
-    \end{equation}
-    
-    \item \textbf{ReLU Activation}: Introduces non-linearity (see \eqref{relu})
-    
-    \item \textbf{Max Pooling}: Downsamples feature maps with stride of 2 
-    (see Eq. \eqref{max_pool})
+        \begin{equation}\label{batchnorm}
+            \hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}
+        \end{equation}
+        
+        \item \textbf{ReLU Activation}: Introduces non-linearity (see \eqref{relu})
+        
+        \item \textbf{Max Pooling}: Downsamples feature maps with stride of 2 
+        (see Eq. \eqref{max_pool})
+    \end{enumerate}
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Block} & \textbf{In Ch.} & \textbf{Out Ch.} & \textbf{Kernel} & \textbf{Output Size} \\
+        \hline
+            Input & — & — & — & $(B, 1, 212, 392)$ \\
+            Conv Block 1 & 1 & 16 & 5×5 & $(B, 16, 106, 196)$ \\
+            Conv Block 2 & 16 & 32 & 5×5 & $(B, 32, 53, 98)$ \\
+            Conv Block 3 & 32 & 64 & 3×3 & $(B, 64, 26, 49)$ \\
+            Conv Block 4 & 64 & 128 & 3×3 & $(B, 128, 13, 24)$ \\
+            Adaptive Avg Pool & 128 & 128 & — & $(B, 128, 16, 16)$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+
+    The \verb|AdaptiveAvgPool2d((16, 16))| layer ensures that regardless of input dimensions, 
+    the output is always $128 \times 16 \times 16 = 32,768$ features. \\
+
+    \item \textbf{Fully Connected Regressor:}
+    \begin{verbatim}
+        Linear(32768, 256) -> ReLU -> Dropout(0.4) ->
+        Linear(256, 128) -> ReLU -> Dropout(0.3) ->
+        Linear(128, 64) -> ReLU -> Dropout(0.2) ->
+        Linear(64, 1)
+    \end{verbatim}
+
+    Multi-layer design with progressive dropout rates to prevent overfitting on high-dimensional input. \\
+    \textbf{Model Complexity:} \\
+    Total parameters: $\approx 8,536,161$ (30.5× more than 1D model)
 \end{enumerate}
-
-\begin{center}
-    \begin{tabular}{|c|c|c|c|c|}
-    \hline
-    \textbf{Block} & \textbf{In Ch.} & \textbf{Out Ch.} & \textbf{Kernel} & \textbf{Output Size} \\
-    \hline
-        Input & — & — & — & $(B, 1, 212, 392)$ \\
-        Conv Block 1 & 1 & 16 & 5×5 & $(B, 16, 106, 196)$ \\
-        Conv Block 2 & 16 & 32 & 5×5 & $(B, 32, 53, 98)$ \\
-        Conv Block 3 & 32 & 64 & 3×3 & $(B, 64, 26, 49)$ \\
-        Conv Block 4 & 64 & 128 & 3×3 & $(B, 128, 13, 24)$ \\
-        Adaptive Avg Pool & 128 & 128 & — & $(B, 128, 16, 16)$ \\
-    \hline
-    \end{tabular}
-\end{center}
-
-The \verb|AdaptiveAvgPool2d((16, 16))| layer ensures that regardless of input dimensions, 
-the output is always $128 \times 16 \times 16 = 32,768$ features. \\
-
-\textbf{Fully Connected Regressor:}
-\begin{verbatim}
-    Linear(32768, 256) -> ReLU -> Dropout(0.4) ->
-    Linear(256, 128) -> ReLU -> Dropout(0.3) ->
-    Linear(128, 64) -> ReLU -> Dropout(0.2) ->
-    Linear(64, 1)
-\end{verbatim}
-
-Multi-layer design with progressive dropout rates to prevent overfitting on high-dimensional input. \\
-
-\textbf{Model Complexity:}
-Total parameters: $\approx 8,536,161$ (30.5× more than 1D model)
 
 \subsubsection{Architectural Comparison:}
 
@@ -757,7 +757,7 @@ The typical workflow to reproduce results is:
     \begin{verbatim}
     python visualizations.py
     \end{verbatim}
-    Generates publication-quality plots from original visualization pipeline.
+    Generates plots from original visualization pipeline.
 \end{enumerate}
 
 \subsubsection{Data Flow Diagram:}

@@ -12,73 +12,76 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Configuration Management (\texttt  {config.py})}{7}{subsection.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Key Components:}{7}{subsubsection.4.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Data Preprocessing (\texttt  {data\_preprocessing.py})}{7}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Processing Steps:}{7}{subsubsection.4.2.1}\protected@file@percent }
-\newlabel{log_scale}{{11}{8}{Processing Steps:}{equation.4.11}{}}
-\newlabel{normalize}{{12}{8}{Processing Steps:}{equation.4.12}{}}
-\newlabel{clip}{{13}{8}{Processing Steps:}{equation.4.13}{}}
-\newlabel{welch_psd}{{14}{8}{Processing Steps:}{equation.4.14}{}}
-\newlabel{psd_db}{{15}{8}{Processing Steps:}{equation.4.15}{}}
-\newlabel{psd_normalized}{{16}{8}{Processing Steps:}{equation.4.16}{}}
-\newlabel{psd_clipped}{{17}{8}{Processing Steps:}{equation.4.17}{}}
-\newlabel{stft}{{18}{8}{Processing Steps:}{equation.4.18}{}}
-\newlabel{stft_mag}{{19}{8}{Processing Steps:}{equation.4.19}{}}
-\newlabel{stft_db}{{20}{9}{Processing Steps:}{equation.4.20}{}}
-\newlabel{stft_normalized}{{21}{9}{Processing Steps:}{equation.4.21}{}}
-\newlabel{stft_clipped}{{22}{9}{Processing Steps:}{equation.4.22}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Dataset Creation (\texttt  {dataset.py})}{9}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Key Components:}{9}{subsubsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}General Processing Framework}{7}{subsubsection.4.2.1}\protected@file@percent }
+\newlabel{log_scale}{{11}{7}{General Processing Framework}{equation.4.11}{}}
+\newlabel{normalize}{{12}{8}{General Processing Framework}{equation.4.12}{}}
+\newlabel{clip}{{13}{8}{General Processing Framework}{equation.4.13}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Output Format}{8}{subsubsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Complete Output}{8}{subsubsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.4}Processing Steps}{8}{subsubsection.4.2.4}\protected@file@percent }
+\newlabel{welch_psd}{{14}{9}{Processing Steps}{equation.4.14}{}}
+\newlabel{psd_db}{{15}{9}{Processing Steps}{equation.4.15}{}}
+\newlabel{psd_normalized}{{16}{9}{Processing Steps}{equation.4.16}{}}
+\newlabel{psd_clipped}{{17}{9}{Processing Steps}{equation.4.17}{}}
+\newlabel{stft}{{18}{9}{Processing Steps}{equation.4.18}{}}
+\newlabel{stft_mag}{{19}{9}{Processing Steps}{equation.4.19}{}}
+\newlabel{stft_db}{{20}{9}{Processing Steps}{equation.4.20}{}}
+\newlabel{stft_normalized}{{21}{9}{Processing Steps}{equation.4.21}{}}
+\newlabel{stft_clipped}{{22}{9}{Processing Steps}{equation.4.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Dataset Creation (\texttt  {dataset.py})}{10}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Key Components:}{10}{subsubsection.4.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Model Architecture (\texttt  {models.py})}{10}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}WhistleCNN Architecture:}{10}{subsubsection.4.4.1}\protected@file@percent }
-\newlabel{conv1d}{{23}{10}{WhistleCNN Architecture:}{equation.4.23}{}}
-\newlabel{relu}{{24}{10}{WhistleCNN Architecture:}{equation.4.24}{}}
-\newlabel{max_pool}{{25}{10}{WhistleCNN Architecture:}{equation.4.25}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}WhistleCNN Architecture}{11}{subsubsection.4.4.1}\protected@file@percent }
+\newlabel{conv1d}{{23}{11}{WhistleCNN Architecture}{equation.4.23}{}}
+\newlabel{relu}{{24}{11}{WhistleCNN Architecture}{equation.4.24}{}}
+\newlabel{max_pool}{{25}{11}{WhistleCNN Architecture}{equation.4.25}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Extended Model Architectures (\texttt  {models\_2d.py})}{11}{subsection.4.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}WhistleCNN1D Architecture (1D PSD):}{11}{subsubsection.4.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}WhistleCNN2D Architecture (2D STFT):}{11}{subsubsection.4.5.2}\protected@file@percent }
-\newlabel{conv2d}{{26}{11}{WhistleCNN2D Architecture (2D STFT):}{equation.4.26}{}}
-\newlabel{batchnorm}{{27}{11}{WhistleCNN2D Architecture (2D STFT):}{equation.4.27}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}WhistleCNN2D Architecture (2D STFT):}{12}{subsubsection.4.5.2}\protected@file@percent }
+\newlabel{conv2d}{{26}{12}{WhistleCNN2D Architecture (2D STFT):}{equation.4.26}{}}
+\newlabel{batchnorm}{{27}{12}{WhistleCNN2D Architecture (2D STFT):}{equation.4.27}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}Architectural Comparison:}{12}{subsubsection.4.5.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Model Training (\texttt  {train.py})}{12}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Training Configuration:}{12}{subsubsection.4.6.1}\protected@file@percent }
-\newlabel{l1_loss}{{28}{12}{Training Configuration:}{equation.4.28}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Training Loop Structure:}{12}{subsubsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Training Configuration:}{13}{subsubsection.4.6.1}\protected@file@percent }
+\newlabel{l1_loss}{{28}{13}{Training Configuration:}{equation.4.28}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Training Loop Structure:}{13}{subsubsection.4.6.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Parallel Training Pipeline (\texttt  {train\_parallel.py})}{13}{subsection.4.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.1}Training Workflow:}{13}{subsubsection.4.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.2}Performance Metrics:}{13}{subsubsection.4.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.3}Output Artifacts:}{13}{subsubsection.4.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.4}Baseline Models (\texttt  {baselines.py})}{13}{subsubsection.4.7.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.5}Baseline 1: Peak Frequency Linear Regression}{13}{subsubsection.4.7.5}\protected@file@percent }
-\newlabel{peak_freq}{{29}{13}{Baseline 1: Peak Frequency Linear Regression}{equation.4.29}{}}
-\newlabel{linear_reg}{{30}{13}{Baseline 1: Peak Frequency Linear Regression}{equation.4.30}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.6}Baseline 2: Full Spectrum Ridge Regression}{13}{subsubsection.4.7.6}\protected@file@percent }
-\newlabel{ridge_reg}{{31}{13}{Baseline 2: Full Spectrum Ridge Regression}{equation.4.31}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.2}Performance Metrics:}{14}{subsubsection.4.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.3}Output Artifacts:}{14}{subsubsection.4.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.4}Baseline Models (\texttt  {baselines.py})}{14}{subsubsection.4.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.5}Baseline 1: Peak Frequency Linear Regression}{14}{subsubsection.4.7.5}\protected@file@percent }
+\newlabel{peak_freq}{{29}{14}{Baseline 1: Peak Frequency Linear Regression}{equation.4.29}{}}
+\newlabel{linear_reg}{{30}{14}{Baseline 1: Peak Frequency Linear Regression}{equation.4.30}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.6}Baseline 2: Full Spectrum Ridge Regression}{14}{subsubsection.4.7.6}\protected@file@percent }
+\newlabel{ridge_reg}{{31}{14}{Baseline 2: Full Spectrum Ridge Regression}{equation.4.31}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.7}Evaluation Metrics:}{14}{subsubsection.4.7.7}\protected@file@percent }
 \newlabel{MSE}{{32}{14}{Evaluation Metrics:}{equation.4.32}{}}
 \newlabel{MAE}{{33}{14}{Evaluation Metrics:}{equation.4.33}{}}
 \newlabel{R2}{{34}{14}{Evaluation Metrics:}{equation.4.34}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.8}Visualization:}{14}{subsubsection.4.7.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Tree-Based Models (\texttt  {tree\_models.py})}{14}{subsection.4.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.1}Model 1: Random Forest Regressor}{14}{subsubsection.4.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.2}Model 2: XGBoost Regressor}{14}{subsubsection.4.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.3}Feature Importance Visualization:}{14}{subsubsection.4.8.3}\protected@file@percent }
-\newlabel{feature_importance}{{35}{14}{Feature Importance Visualization:}{equation.4.35}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Visualization (\texttt  {visualizations.py})}{14}{subsection.4.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.8}Visualization:}{15}{subsubsection.4.7.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Tree-Based Models (\texttt  {tree\_models.py})}{15}{subsection.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.1}Model 1: Random Forest Regressor}{15}{subsubsection.4.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.2}Model 2: XGBoost Regressor}{15}{subsubsection.4.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.8.3}Feature Importance Visualization:}{15}{subsubsection.4.8.3}\protected@file@percent }
+\newlabel{feature_importance}{{35}{15}{Feature Importance Visualization:}{equation.4.35}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Visualization (\texttt  {visualizations.py})}{15}{subsection.4.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.1}set\_plot\_style():}{15}{subsubsection.4.9.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.2}plot\_comparative\_spectra():}{15}{subsubsection.4.9.2}\protected@file@percent }
 \newlabel{low_flow_spectrum}{{36}{15}{plot\_comparative\_spectra():}{equation.4.36}{}}
 \newlabel{high_flow_spectrum}{{37}{15}{plot\_comparative\_spectra():}{equation.4.37}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.3}plot\_global\_spectrogram():}{15}{subsubsection.4.9.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.4}Output:}{15}{subsubsection.4.9.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.10}Comparative Visualization Framework (\texttt  {comparison\_viz.py})}{15}{subsection.4.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.1}PercentileSampler Class:}{15}{subsubsection.4.10.1}\protected@file@percent }
-\newlabel{percentiles}{{38}{15}{PercentileSampler Class:}{equation.4.38}{}}
-\newlabel{percentile_sample}{{39}{15}{PercentileSampler Class:}{equation.4.39}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.3}plot\_global\_spectrogram():}{16}{subsubsection.4.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.9.4}Output:}{16}{subsubsection.4.9.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.10}Comparative Visualization Framework (\texttt  {comparison\_viz.py})}{16}{subsection.4.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.1}PercentileSampler Class:}{16}{subsubsection.4.10.1}\protected@file@percent }
+\newlabel{percentiles}{{38}{16}{PercentileSampler Class:}{equation.4.38}{}}
+\newlabel{percentile_sample}{{39}{16}{PercentileSampler Class:}{equation.4.39}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.2}plot\_percentile\_grid():}{16}{subsubsection.4.10.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.3}plot\_contrast\_pairs():}{16}{subsubsection.4.10.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.4}plot\_all\_percentiles\_overlay():}{16}{subsubsection.4.10.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.5}plot\_stft\_heatmap\_progression():}{16}{subsubsection.4.10.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.6}Output Visualizations:}{16}{subsubsection.4.10.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.4}plot\_all\_percentiles\_overlay():}{17}{subsubsection.4.10.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.5}plot\_stft\_heatmap\_progression():}{17}{subsubsection.4.10.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.10.6}Output Visualizations:}{17}{subsubsection.4.10.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.11}Execution Order and Data Flow}{17}{subsection.4.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.11.1}Data Flow Diagram:}{18}{subsubsection.4.11.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.12}Key Design Decisions}{18}{subsection.4.12}\protected@file@percent }
-\gdef \@abspage@last{18}
+\gdef \@abspage@last{19}
