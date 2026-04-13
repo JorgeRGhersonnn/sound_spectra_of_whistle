@@ -271,11 +271,11 @@ OUTPUT dssf-notes.toc
 INPUT ./exploratory-analysis.tex
 INPUT ./exploratory-analysis.tex
 INPUT exploratory-analysis.tex
-INPUT ./images/spectrum_flowrate_afterFFT.png
-INPUT ./images/spectrum_flowrate_afterFFT.png
-INPUT ./images/spectrum_flowrate_afterFFT.png
-INPUT ./images/spectrum_flowrate_afterFFT.png
-INPUT ./images/spectrum_flowrate_afterFFT.png
+INPUT ./images/global_spectrogram.png
+INPUT ./images/global_spectrogram.png
+INPUT ./images/global_spectrogram.png
+INPUT ./images/global_spectrogram.png
+INPUT ./images/global_spectrogram.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT ./software-implementation.tex

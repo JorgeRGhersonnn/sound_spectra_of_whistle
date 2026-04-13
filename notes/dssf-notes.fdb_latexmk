@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1776034915.70039 "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" "dssf-notes.pdf" "dssf-notes" 1776034921.80959 0
+["pdflatex"] 1776052126.19521 "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" "dssf-notes.pdf" "dssf-notes" 1776052131.95377 0
   "/etc/texmf/web2c/texmf.cnf" 1749166900.55071 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/jorgegherson/Documents/bucknell/sound_spectra_of_whistle/notes/dssf-notes.tex" 1776034214.67359 4320 b635b02a5057d37a6e0618221ece719c ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -169,11 +169,12 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1749166912.44061 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1749166927 8213316 0c961fb3aaf48317b0fbd22960b63bf1 ""
-  "dssf-notes.aux" 1776034921.67939 19385 2b561e0d42d4b5fda2820fdfee90feb3 "pdflatex"
-  "dssf-notes.out" 1776034921.68339 12604 e5aa944ce9ec6caa029feee1ddbee4b3 "pdflatex"
+  "dssf-notes.aux" 1776052131.8774 19385 2b561e0d42d4b5fda2820fdfee90feb3 "pdflatex"
+  "dssf-notes.out" 1776052131.8784 12604 e5aa944ce9ec6caa029feee1ddbee4b3 "pdflatex"
   "dssf-notes.tex" 1776034214.67359 4320 b635b02a5057d37a6e0618221ece719c ""
-  "dssf-notes.toc" 1776034921.68339 6004 3da4afd90f1c7f3cda9f34b53d9ac91e "pdflatex"
-  "exploratory-analysis.tex" 1775775285.24625 5571 c1f53d2cd75ca7212e03e6eebae55d45 ""
+  "dssf-notes.toc" 1776052131.8794 6004 3da4afd90f1c7f3cda9f34b53d9ac91e "pdflatex"
+  "exploratory-analysis.tex" 1776052119.26942 5570 10eb6651a0cedb4ec922c154716a3d04 ""
+  "images/global_spectrogram.png" 1776034261.89957 763368 5185f223d6b3cc32d920821446e9c271 ""
   "images/model_contrast_1_5_vs_95_Percentile_high.png" 1776034261.89057 609125 cff8f88ce0ecc1914055c422f8090bbb ""
   "images/model_contrast_1_5_vs_95_Percentile_low.png" 1776034261.87057 575688 d6683f75775018251e1d3276e5927bd5 ""
   "images/model_contrast_2_25_vs_75_Percentile_high.png" 1776034261.85057 621318 693b3744384d1dac707770b884206427 ""
@@ -181,7 +182,6 @@
   "images/percentile_overlay_linear_scale.png" 1776034261.79857 843011 005ebec16e4df516d4ae30b691abf3ae ""
   "images/percentile_overlay_log_scale.png" 1776034261.76457 751868 e8956dbfc3368c8969b59c8746936721 ""
   "images/spectra_comparison.png" 1776034261.75857 465919 e4294d72d40263d8affdc0865edb44f6 ""
-  "images/spectrum_flowrate_afterFFT.png" 1773911520.98802 290862 6f81df7adc58caf0bab1b436441fe582 ""
   "images/stft_percentile_heatmaps.png" 1776034261.72957 1620303 a2881acf8464d19cd2c95a6ee4b42e45 ""
   "images/training_comparison_individual.png" 1776034261.71657 410383 89c62b177a5675a82ab005fb1b125c7d ""
   "images/training_comparison_overlay.png" 1776034261.68957 402811 4687d8451137a4ea532c77090da281c5 ""
